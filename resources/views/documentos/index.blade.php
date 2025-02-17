@@ -9,10 +9,10 @@
 </head>
 <body class="bg-muni">
     <div class="container">
-            <button class="btn btn-primary">
-                <a class="text-light" href="{{ route('documentos.create') }}">NUEVO DOCUMENTO</a>
-            </button><br>
-            
+            @can('documentos.store')
+            <a class="text-light" href="{{ route('documentos.create') }}"><button class="btn btn-primary">NUEVO DOCUMENTO</button></a>
+            @endcan
+            <br>
             <table id='tabla'>
                 <thead>
                     <tr>
@@ -22,6 +22,10 @@
                             <th scope="col" class="fs-4 text">Archivo</th>
                             <th scope="col" class="fs-4 text">Estado</th>
                             <th scope="col" class="fs-4 text">Acciones</th>
+                           
+                            
+                            
+                            
                     </tr>
                 </thead>
                 <tbody>
@@ -45,27 +49,33 @@
                                     <td data-cell="estado"><span class="badge text-bg-success fs-5 text">{{$documento[1]['estado']}}</span></td>
                                     <td class='no-hover'>
                                         <div class="btn-group" role="group">
-                                                <button type="button" class="btn btn-danger" 
-                                                data-bs-toggle="modal"
-                                                data-id="{{$documento[1]['id_documento']}}"
-                                                data-bs-target="#cambiarEstadoModal" 
-                                                data-bs-placement="left"
-                                                data-bs-custom-class="tooltip-danger"
-                                                data-bs-title="CAMBIAR Estado"><i class="bi bi-trash-fill"></i></button>
-
-                                                <button type="button" id="mod" class="btn btn-success btn-sm"
-                                                data-bs-toggle="tooltip" 
-                                                data-bs-placement="right"
-                                                data-bs-custom-class="tooltip-success"
-                                                data-toggle="modal"
-                                                data-target="#modalDocumento"
-                                                data-bs-title="EDITAR Registro"><a href="/editar/{{$documento[1]['id_documento']}}"><i class="bi bi-pen-fill"></i></a></button>
+                                                @can('documentos.estado')
+                                                    <button type="button" class="btn btn-danger" 
+                                                    data-bs-toggle="modal"
+                                                    data-id="{{$documento[1]['id_documento']}}"
+                                                    data-bs-target="#cambiarEstadoModal" 
+                                                    data-bs-placement="left"
+                                                    data-bs-custom-class="tooltip-danger"
+                                                    data-bs-title="CAMBIAR Estado"><i class="bi bi-trash-fill"></i></button>
+                                                @endcan
+                                                
+                                                @can('documentos.update')
+                                                    <button type="button" id="mod" class="btn btn-success btn-sm"
+                                                    data-bs-toggle="tooltip" 
+                                                    data-bs-placement="right"
+                                                    data-bs-custom-class="tooltip-success"
+                                                    data-toggle="modal"
+                                                    data-target="#modalDocumento"
+                                                    data-bs-title="EDITAR Registro"><a href="/editar/{{$documento[1]['id_documento']}}"><i class="bi bi-pen-fill"></i></a></button>
+                                                @endcan
+                                                
                                         </div>
+
                                     </td>
+                                    
                         
                                 </tr>
                         @endif
-                        
                     @endforeach
                 </tbody>
                 <tfoot>

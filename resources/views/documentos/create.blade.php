@@ -24,8 +24,10 @@
                     <label for="archivo" class="form-label">ArchivoPDF</label>
                     <input type="text" class="form-control" id="archivo" name="archivo" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Crear</button>
+                <button type="submit" class="btn btn-primary">CREAR</button>
+                
             </form>
+            <a href="{{ route('documentos.index') }}"><button type="submit" class="btn btn-secondary">VOLVER</button></a>
          </div>   
     </div>
     

@@ -19,7 +19,7 @@ class RoleSeeder extends Seeder
         $editor = Role::create(["name"=> "Editor"]);
         $create = Role::create(["name"=> "Creador"]);
 
-        //PERMISOS
+        //PERMISOS PARA DOCUMENTOS
         Permission::create([
             'name'=> 'documentos.store',
             'description'=>'crear documentos'])->syncRoles([$admin,$create]);
@@ -32,5 +32,14 @@ class RoleSeeder extends Seeder
             'name'=> 'documentos.estado',
             'description'=>'cambiar estado de documentos'])->syncRoles( [$admin,$editor]);
         
+        //Usuarios
+        Permission::create(['name'=>'users.index',
+                                        'description'=> 'Ver usuarios'])->assignRole( $admin);
+        
+        Permission::create(['name'=>'users.edit',
+                                        'description'=> 'Editar usuarios'])->assignRole( $admin);
+
+        Permission::create(['name'=>'users.destroy',
+                                        'description'=> 'Eliminar usuarios'])->assignRole( $admin);
     }
 }

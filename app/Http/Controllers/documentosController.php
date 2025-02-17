@@ -8,6 +8,7 @@ use App\Models\Mes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
 
 class documentosController extends Controller
 {
@@ -20,6 +21,10 @@ class documentosController extends Controller
 
     public function index()
     {
+
+        $usuario = auth()->user();
+        //$usuario->assignRole('Creador');
+        //dd($usuario,$usuario->roles);
         $url = env('URL_API');
         //$valor = true;
         //dd($url);
@@ -27,7 +32,7 @@ class documentosController extends Controller
         $response = $http->get($url.'documentos');
         $documentos = $response->json();
         //dd($documentos);
-        return view('documentos.index',compact('documentos'));
+        return view('documentos.index',compact('documentos','usuario'));
     }
     public function create(){
 
@@ -56,7 +61,7 @@ class documentosController extends Controller
             //dd($response);
             $resultado = json_decode($response->getBody(),true);
 
-            return redirect('/index')->with('successs','Documento Creado');
+            return redirect('/index')->with('successs-create','¡Documento Creado con Exito!');
         }catch(\Exception $e){
             return back()->withError('Error al enviar datos'.$e->getMessage());
         }
@@ -86,10 +91,7 @@ class documentosController extends Controller
         //dd($formData);
         $response = $http->put($url.'documentos/'. $id ,$formData);
         
-        return redirect('/index')->with('success','documendo actualizado con exito');
-    }
-    public function destroy($id){
-
+        return redirect('/index')->with('success-update','¡Documendo actualizado con exito!');
     }
     public function cambiarEstado($id){
 
