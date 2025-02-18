@@ -10,7 +10,7 @@
 
 <div class="card">
     <div class="card-header">
-        <a class="btn btn-primary" href="#">Crear rol</a>
+        <a class="btn btn-primary" href="{{ route('admin.roles.create') }}">Crear rol</a>
     </div>
     <div class="card-body">
         <table class="table table-striped">
@@ -23,20 +23,22 @@
             </thead>
 
             <tbody>
-  
-                <tr>
-                    <td></td>
-                    <td></td>
+                @foreach ($roles as $role)
+                    <tr>
+                        <td>{{ $role->id }}</td>
+                        <td>{{ $role->name }}</td>
 
-                    <td width="10px"><a href="#" class="btn btn-primary btn-sm mb-2">Editar</a></td>
+                        <td width="10px"><a href="{{ route('admin.role.edit',$role) }}" class="btn btn-primary btn-sm mb-2">Editar</a></td>
 
-                    <td width="10px">
-                        <form action="#" method="POST">
-                          
-                            <input type="submit" value="Eliminar" class="btn btn-danger btn-sm">
-                        </form>
-                    </td>
-                </tr>
+                        <td width="10px">
+                            <form action="#" method="POST">
+                            
+                                <input type="submit" value="Eliminar" class="btn btn-danger btn-sm">
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+                
           
             </tbody>
         </table>

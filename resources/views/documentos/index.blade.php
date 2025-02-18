@@ -5,10 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documentos</title>
+    <style>
+        .sidebar {
+            height: 100vh; /* Altura completa de la pantalla */
+            overflow-y: auto; /* Scroll vertical si el contenido es mayor que la altura */
+            position: fixed; /* Barra lateral fija */
+            width: 250px; /* Ancho de la barra lateral */
+        }
+
+        .main-content {
+            padding: 20px;
+            overflow-y: auto; /* Scroll vertical para el contenido principal */
+            max-height: 100vh; /* Altura máxima del contenido principal */
+        }
+    </style>
   </head>
 </head>
 <body class="bg-muni">
-    <div class="container">
+    <div class="container-fluid">
+            @if (session('success-create'))
+            <div class="alert alert-info">
+                {{ session('success-create') }}
+            </div><br>
+            @endif
             @can('documentos.store')
             <div>
                 <a class="text-light" href="{{ route('documentos.create') }}"><button class="btn btn-primary">NUEVO DOCUMENTO</button></a>
@@ -23,7 +42,7 @@
                             <th scope="col" class="fs-4 text">Descripcion</th>
                             <th scope="col" class="fs-4 text">Archivo</th>
                             <th scope="col" class="fs-4 text">Estado</th>
-                            <th scope="col" class="fs-4 text">Acciones</th>
+                            <th scope="col" class="fs-4 text"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,7 +53,7 @@
                                 <td class="text-bg-secondary p-3 fs-5 text" data-cell="titulo">{{$documento[1]['titulo']}}</td>
                                 <td class="text-bg-secondary p-3 fs-5 text" data-cell="descripcion">{{$documento[1]['descripcion']}}</td>
                                 <td class="text-bg-secondary p-3 fs-5 text" data-cell="archivo"></td>
-                                <td class="text-bg-secondary p-3" data-cell="estado"><span class="badge text-bg-secondary fs-5 text">{{$documento[1]['estado']}}</span></td>
+                                <td class="text-bg-secondary p-3" data-cell="estado"><span class="badge text-bg-secondary fs-5 text text-uppercase">{{$documento[1]['estado']}}</span></td>
                                 <td class="text-bg-secondary p-3 fs-5 text"></td>
                             </tr>
                         @endif
@@ -44,7 +63,7 @@
                                     <td data-cell="titulo" class="p-3 fs-5 text">{{$documento[1]['titulo']}}</td>
                                     <td data-cell="descripcion" class="p-3 fs-5 text">{{$documento[1]['descripcion']}}</td>
                                     <td data-cell="archivo" class="p-3 fs-5 text"><a href="{{$documento[1]['archivo']}}"><button>Descargar</button></a></td>
-                                    <td data-cell="estado"><span class="badge text-bg-success fs-5 text">{{$documento[1]['estado']}}</span></td>
+                                    <td data-cell="estado"><span class="badge text-bg-success fs-5 text text-uppercase">{{$documento[1]['estado']}}</span></td>
                                     <td class='no-hover'>
                                         <div class="btn-group" role="group">
                                                 @can('documentos.estado')
@@ -54,7 +73,7 @@
                                                     data-bs-target="#cambiarEstadoModal" 
                                                     data-bs-placement="left"
                                                     data-bs-custom-class="tooltip-danger"
-                                                    data-bs-title="CAMBIAR Estado"><i class="bi bi-trash-fill"></i></button>
+                                                    data-bs-title="CAMBIAR Estado"><i class="bi bi-x-lg"></i></button>
                                                 @endcan
                                                 
                                                 @can('documentos.update')
@@ -79,7 +98,7 @@
                 <tfoot>
                     
                 </tfoot>
-            </table>
+            </table><br>
 
 
 

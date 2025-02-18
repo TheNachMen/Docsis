@@ -332,7 +332,14 @@ return [
             'route' => 'admin.users.index',
             'icon' => 'fa  fa-users',
             'active' => ['admin/users'],
-            'can' => 'user.index'
+            'can' => 'users.index'
+        ],
+        [
+            'text' => 'Roles',
+            'route' => 'admin.roles.index',
+            'icon' => 'fa  fa-lock',
+            'active' => ['admin/roles'],
+            'can' => 'users.index'
         ],
         
     ],
