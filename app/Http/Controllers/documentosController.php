@@ -23,7 +23,7 @@ class documentosController extends Controller
     {
 
         $usuario = auth()->user();
-        //$usuario->assignRole('Creador');
+        //$usuario->assignRole('Editor');
         //dd($usuario,$usuario->roles);
         $url = env('URL_API');
         //$valor = true;

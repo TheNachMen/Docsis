@@ -10,7 +10,9 @@
 <body class="bg-muni">
     <div class="container">
             @can('documentos.store')
-            <a class="text-light" href="{{ route('documentos.create') }}"><button class="btn btn-primary">NUEVO DOCUMENTO</button></a>
+            <div>
+                <a class="text-light" href="{{ route('documentos.create') }}"><button class="btn btn-primary">NUEVO DOCUMENTO</button></a>
+            </div>
             @endcan
             <br>
             <table id='tabla'>
@@ -22,10 +24,6 @@
                             <th scope="col" class="fs-4 text">Archivo</th>
                             <th scope="col" class="fs-4 text">Estado</th>
                             <th scope="col" class="fs-4 text">Acciones</th>
-                           
-                            
-                            
-                            
                     </tr>
                 </thead>
                 <tbody>

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\user;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 
@@ -14,7 +14,7 @@ class userController extends Controller
     public function index()
     {
         //
-        $users = User::simplePaginate(10);
+        $users = User::simplePaginate(30);
         return view("admin.users.index", compact("users"));
     }
 
@@ -22,10 +22,12 @@ class userController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(user $user)
+    public function edit($id)
     {
         $roles = Role::all();
-
+        //dd($roles);
+        $user = User::find($id);
+        //dd($user);
         return view('admin.users.edit', compact('user','roles'));
     }
 
@@ -41,10 +43,12 @@ class userController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    /*
     public function destroy(user $user)
     {
         $user->delete();
 
         return redirect()->action([userController::class,'index'])->with('success-delete','Usuario eliminado con exito');
     }
+    */
 }

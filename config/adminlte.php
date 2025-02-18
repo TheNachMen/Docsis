@@ -329,8 +329,10 @@ return [
         ['header' => 'account_settings'],
         [
             'text' => 'Usuarios',
-            'route' => 'documentos.index',
+            'route' => 'admin.users.index',
             'icon' => 'fa  fa-users',
+            'active' => ['admin/users'],
+            'can' => 'user.index'
         ],
         
     ],
