@@ -31,10 +31,7 @@
                         <td width="10px"><a href="{{ route('admin.role.edit',$role) }}" class="btn btn-primary btn-sm mb-2">Editar</a></td>
 
                         <td width="10px">
-                            <form action="#" method="POST">
-                            
-                                <input type="submit" value="Eliminar" class="btn btn-danger btn-sm">
-                            </form>
+                            <a href="{{ route('admin.role.delete',$role) }}" class="btn btn-danger btn-sm mb-2">Eliminar</a>
                         </td>
                     </tr>
                 @endforeach

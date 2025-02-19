@@ -5,6 +5,7 @@ use App\Models\Anio;
 use App\Models\Documento;
 use App\Models\EstadoDocumento;
 use App\Models\Mes;
+use File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
@@ -41,6 +42,20 @@ class documentosController extends Controller
 
     }
     public function store(Request $request){
+        //verificar y guardar el archivo 
+        $request->validate([
+            'archivo' => 'required|file|mimes:pdf'
+        ]);
+        $ruta= "";
+        if($request->hasFile('archivo')){
+            $archivo = $request->file('archivo');
+            //dd($archivo);
+            $nombreNuevo = $request->titulo. ' ' . date('Y');
+            $ruta = $archivo->storeAs('documents/'.date('Y'), $nombreNuevo.'.'.$archivo->extension(),'public');
+            //dd($ruta);
+        }
+        
+        //LLamar a la API
         $url = env('URL_API');
         $http = Http::withoutVerifying();
         /*
@@ -55,7 +70,7 @@ class documentosController extends Controller
             $formData=[
                 'titulo'=> $request->titulo,
                 'descripcion'=> $request->descripcion,
-                'archivo'=> $request->archivo,
+                'archivo'=> $ruta,
             ];
             //dd($formData);
             $response = $http->post($url.'documentosStore',$formData);
@@ -82,6 +97,9 @@ class documentosController extends Controller
     }
     
     public function update(Request $request, $id){
+        //actualizar archivo
+
+        //llamar a la API para actualizar
         $url = env('URL_API');
         $http = Http::withoutVerifying();
         $formData=[

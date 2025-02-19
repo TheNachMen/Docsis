@@ -9,25 +9,32 @@
 <body class="bg-muni">
     <div class="container">
         <div class="card">
-            <h1 class=".tx-10">Nuevo Documento</h1>
-            <form action="{{ route('documentos.store') }}" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <label for="titulo" class="form-label">Titulo</label>
-                    <input type="text" class="form-control" id="titulo" name="titulo" required>
-                </div>
-                <div class="mb-3">
-                    <label for="descripcion" class="form-label">Descripcion</label>
-                    <input type="text" class="form-control" id="descripcion" name="descripcion" required>
-                </div>
-                <div class="mb-3">
-                    <label for="archivo" class="form-label">ArchivoPDF</label>
-                    <input type="text" class="form-control" id="archivo" name="archivo" required>
-                </div>
-                <button type="submit" class="btn btn-primary">CREAR</button>
-                
-            </form>
-            <a href="{{ route('documentos.index') }}"><button type="submit" class="btn btn-secondary">VOLVER</button></a>
+            <div class="row">
+                    <h1 class=".tx-10">Nuevo Documento</h1>
+                    <form action="{{ route('documentos.store') }}" method="POST" enctype="multipart/form-data" >
+                        @csrf
+                        <div class="mb-3">
+                            <label for="titulo" class="form-label">Titulo</label>
+                            <input type="text" class="form-control" id="titulo" name="titulo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="descripcion" class="form-label">Descripcion</label>
+                            <input type="text" class="form-control" id="descripcion" name="descripcion" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="archivo" class="form-label">ArchivoPDF</label>
+                            <input type="file" class="form-control" id="archivo" name="archivo" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">CREAR</button>
+                        
+                    </form>
+                    <br>
+                    <div>
+                        <a href="{{ route('documentos.index') }}"><button type="submit" class="btn btn-secondary">VOLVER</button></a>
+                    </div>
+            </div>
+            
+            
          </div>   
     </div>
     

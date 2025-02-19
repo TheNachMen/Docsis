@@ -62,24 +62,27 @@ class roleController extends Controller
     {
         //
         $permissions = Permission::all();
+
         return view('admin.roles.edit', compact('permissions','role'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, $id)
     {
+        $role = Role::find( $id );
+        
         $request->validate([
             'name' => 'required',
         ]);
-
         $role->update([
             'name'=> $request->name
         ]);
+        
         $role->permissions()->sync($request->permissions);
 
-        return redirect()->action([roleController::class,'index'])->with('success-update','Rol modificado con éxito');
+        return redirect()->route('admin.role.edit',$id)->with('success-update','Rol modificado con éxito');
     }
 
     /**

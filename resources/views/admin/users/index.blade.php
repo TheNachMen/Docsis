@@ -38,7 +38,7 @@
                                 data-bs-toggle="tooltip" 
                                 data-bs-placement="right"
                                 data-bs-custom-class="tooltip-success"
-                                data-bs-title="EDITAR Registro"><i class="bi bi-pen-fill"></i></button>
+                                data-bs-title="EDITAR Registro">EDITAR ROL</button>
                             </a>
                         </div>
                     </td>

@@ -10,7 +10,7 @@
     <div class="container">
         <div class="card">
             <h1 class=".tx-10">Nuevo Documento</h1>
-            <form action="{{ route('documentos.update',$documento['documento']['id_documento']) }}" method="POST">
+            <form action="{{ route('documentos.update',$documento['documento']['id_documento']) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-3">
                     <label for="titulo" class="form-label">Titulo</label>
@@ -22,10 +22,17 @@
                 </div>
                 <div class="mb-3">
                     <label for="archivo" class="form-label">ArchivoPDF</label>
-                    <input type="text" class="form-control" id="archivo" name="archivo" value="{{ $documento['documento']['archivo'] }}" required>
+                    <input type="file" class="form-control" id="archivo" name="archivo" value=""  required>
+                    
+                    
                 </div>
                 <button type="submit" class="btn btn-primary">ACTUALIZAR</button>
             </form>
+            <br>
+            <div>
+                <a href="{{ route('documentos.index') }}"><button class="btn btn-secondary">VOLVER</button></a>
+            </div>
+            
          </div>   
     </div>
     

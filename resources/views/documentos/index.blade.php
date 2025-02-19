@@ -62,7 +62,7 @@
                                     <td data-cell="fecha_modificacion" class="p-3 fs-5 text">{{$documento[0]['fecha_modificacion']}}</td>
                                     <td data-cell="titulo" class="p-3 fs-5 text">{{$documento[1]['titulo']}}</td>
                                     <td data-cell="descripcion" class="p-3 fs-5 text">{{$documento[1]['descripcion']}}</td>
-                                    <td data-cell="archivo" class="p-3 fs-5 text"><a href="{{$documento[1]['archivo']}}"><button>Descargar</button></a></td>
+                                    <td data-cell="archivo" class="p-3 fs-5 text"><a href="{{ asset('storage/'.$documento[1]['archivo']) }}"><button>Descargar</button></a></td>
                                     <td data-cell="estado"><span class="badge text-bg-success fs-5 text text-uppercase">{{$documento[1]['estado']}}</span></td>
                                     <td class='no-hover'>
                                         <div class="btn-group" role="group">

@@ -34,10 +34,12 @@ class userController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, user $user)
+    public function update(Request $request, $id)
     {
+        $user = User::find($id);
+        //dd($user);
         $user->roles()->sync($request->role);
-        return redirect()->route('user.edit')->with('success-update','rol asignado con exito');
+        return redirect()->route('admin.user.edit',$id)->with('success-update','Rol asignado con exito');
     }
 
     /**
