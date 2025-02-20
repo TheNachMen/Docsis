@@ -1,4 +1,11 @@
 @include('layouts.app')
+
+
+@if (session('success-update'))
+<div class="alert alert-info">
+    {{ session('success-update') }}
+</div>
+@endif
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,16 +21,16 @@
                 @csrf
                 <div class="mb-3">
                     <label for="titulo" class="form-label">Titulo</label>
-                    <input type="text" class="form-control" id="titulo" name="titulo" value="{{$documento['documento']['titulo'] }}" required>
+                    <input type="text" class="form-control" id="titulo" name="titulo" value="{{$documento['documento']['titulo'] }}">
                 </div>
                 <div class="mb-3">
                     <label for="descripcion" class="form-label">Descripcion</label>
-                    <input type="text" class="form-control" id="descripcion" name="descripcion" value="{{ $documento['documento']['descripcion'] }}" required>
+                    <input type="text" class="form-control" id="descripcion" name="descripcion" value="{{ $documento['documento']['descripcion'] }}">
                 </div>
                 <div class="mb-3">
                     <label for="archivo" class="form-label">ArchivoPDF</label>
-                    <input type="file" class="form-control" id="archivo" name="archivo" value=""  required>
-                    
+                    <input type="file" class="form-control" id="archivo" name="archivo" value="{{ asset('storage/'. $documento['documento']['archivo']) }}">
+                    <a href="{{ asset('storage/'. $documento['documento']['archivo']) }}"><label for="">Archivo:{{ Str::afterLast($documento['documento']['archivo'],'/') }}</label></a>
                     
                 </div>
                 <button type="submit" class="btn btn-primary">ACTUALIZAR</button>

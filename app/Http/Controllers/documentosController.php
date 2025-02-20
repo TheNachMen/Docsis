@@ -24,6 +24,7 @@ class documentosController extends Controller
     
     public function index()
     {
+        $mes=[[1,"ENERO"],[2,"FEBRERO"],[3,"MARZO"],[4,"ABRIL"],[5,"MAYO"],[6,"JUNIO"],[7,"JULIO"],[8,"AGOSTO"],[9,"SEPTIEMBRE"],[10,"OCTUBRE"],[11,"NOVIEMBRE"],[12,"DICIEMBRE"]];
         $usuario = auth()->user();
         //$usuario->assignRole('Editor');
         //dd($usuario,$usuario->roles);
@@ -44,9 +45,15 @@ class documentosController extends Controller
     public function store(Request $request){
         //verificar y guardar el archivo 
         $request->validate([
+            'titulo' => 'required',
+            'descripcion'=> 'required',
             'archivo' => 'required|file|mimes:pdf'
         ]);
+        //dd($validate);
+        
+        //asignamos una variable ruta
         $ruta= "";
+        //verificamos si el campo archivo tiene un archivo.
         if($request->hasFile('archivo')){
             $archivo = $request->file('archivo');
             //dd($archivo);
@@ -58,13 +65,6 @@ class documentosController extends Controller
         //LLamar a la API
         $url = env('URL_API');
         $http = Http::withoutVerifying();
-        /*
-        $request = Validator::make($request->all(),[
-            "titulo"=> "required",
-            "descripcion"=> "required",
-            "archivo"=> "required",
-        ]) ;
-         */
          
         try {
             $formData=[
@@ -97,20 +97,36 @@ class documentosController extends Controller
     }
     
     public function update(Request $request, $id){
-        //actualizar archivo
-
-        //llamar a la API para actualizar
+        $documento = Documento::find($id);
         $url = env('URL_API');
         $http = Http::withoutVerifying();
+        $request->validate([
+            'titulo' => 'required',
+            'descripcion'=> 'required',
+            'archivo' => 'file|mimes:pdf'
+        ]);
+        //verificamos si el campo archivo no tiene un archivo, en el caso de que no reciba algun archivo, se conservara el que ya estaba asociado originalmente.
+        if(!$request->hasFile('archivo')){
+            $ruta = $documento->archivo;
+            //dd($ruta);
+        }else{
+            //en el caso que el campo 'archivo' contenga un archivo, remplazara al anterior que estaba
+            File::delete(public_path('storage/'.$documento->archivo));
+            $archivo = $request->file('archivo');
+            $nombreNuevo = $request->titulo. ' ' . date('Y');
+            $ruta = $archivo->storeAs('documents/'.date('Y'), $nombreNuevo.'.'.$archivo->extension(),'public');
+        }
+        
+        //llamar a la API para actualizar
         $formData=[
             'titulo'=> $request->titulo,
             'descripcion'=> $request->descripcion,
-            'archivo'=> $request->archivo,
+            'archivo'=> $ruta,
         ];
         //dd($formData);
         $response = $http->put($url.'documentos/'. $id ,$formData);
         
-        return redirect()->action([documentosController::class,'index'])->with('success-update','¡Documendo actualizado con exito!');
+        return redirect()->route('documentos.edit',$id)->with('success-update','¡Documendo actualizado con exito!');
     }
     public function cambiarEstado($id){
 
