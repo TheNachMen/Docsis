@@ -29,8 +29,8 @@ Route::middleware('auth')->group(function () {
 
     //visualizar y crear documentos
     Route::get('/index',[documentosController::class,'index'])->name('documentos.index');
-    Route::get('/index/create',[documentosController::class,'create'])->name('documentos.create');
-    Route::post('/index',[documentosController::class,'store'])->name('documentos.store');
+    Route::get('/index/crear',[documentosController::class,'create'])->name('documentos.create');
+    Route::post('/index/almacenar',[documentosController::class,'store'])->name('documentos.store');
     
     //editar un documento
     Route::get('/editar/{id}',[documentosController::class, 'edit'])->name('documentos.edit');

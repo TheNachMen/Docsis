@@ -25,6 +25,10 @@ class RoleSeeder extends Seeder
             'description'=>'ver listado de documentos'])->syncRoles([$admin,$editor,$create]);
             
         Permission::create([
+            'name'=> 'documentos.cerrado',
+            'description'=>'ver listado de documentos cerrados'])->assignRole( $admin);
+        
+        Permission::create([
             'name'=> 'documentos.store',
             'description'=>'crear documentos'])->syncRoles([$admin,$create]);
 

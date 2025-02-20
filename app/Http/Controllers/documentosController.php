@@ -5,6 +5,7 @@ use App\Models\Anio;
 use App\Models\Documento;
 use App\Models\EstadoDocumento;
 use App\Models\Mes;
+use Carbon\Carbon;
 use File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -24,9 +25,9 @@ class documentosController extends Controller
     
     public function index()
     {
-        $mes=[[1,"ENERO"],[2,"FEBRERO"],[3,"MARZO"],[4,"ABRIL"],[5,"MAYO"],[6,"JUNIO"],[7,"JULIO"],[8,"AGOSTO"],[9,"SEPTIEMBRE"],[10,"OCTUBRE"],[11,"NOVIEMBRE"],[12,"DICIEMBRE"]];
+        $meses=[[1,'ENERO'],[2,'FEBRERO'],[3,'MARZO'],[4,'ABRIL'],[5,'MAYO'],[6,'JUNIO'],[7,'JULIO'],[8,'AGOSTO'],[9,'SEPTIEMBRE'],[10,'OCTUBRE'],[11,'NOVIEMBRE'],[12,'DICIEMBRE']];
         $usuario = auth()->user();
-        //$usuario->assignRole('Editor');
+        //$usuario->assignRole('Administrador');
         //dd($usuario,$usuario->roles);
         $url = env('URL_API');
         //$valor = true;
@@ -35,7 +36,7 @@ class documentosController extends Controller
         $response = $http->get($url.'documentos');
         $documentos = $response->json();
         //dd($documentos);
-        return view('documentos.index',compact('documentos','usuario'));
+        return view('documentos.index',compact('documentos','usuario','meses'));
     }
     public function create(){
 
@@ -43,12 +44,14 @@ class documentosController extends Controller
 
     }
     public function store(Request $request){
+        $fecha = Carbon::now('America/Santiago')->format('d-m-Y H-i-s');
         //verificar y guardar el archivo 
         $request->validate([
-            'titulo' => 'required',
-            'descripcion'=> 'required',
+            'titulo' => 'required|max:30',
+            'descripcion'=> 'required|max:100',
             'archivo' => 'required|file|mimes:pdf'
         ]);
+        
         //dd($validate);
         
         //asignamos una variable ruta
@@ -57,7 +60,7 @@ class documentosController extends Controller
         if($request->hasFile('archivo')){
             $archivo = $request->file('archivo');
             //dd($archivo);
-            $nombreNuevo = $request->titulo. ' ' . date('Y');
+            $nombreNuevo = $request->titulo. ' ' . $fecha;
             $ruta = $archivo->storeAs('documents/'.date('Y'), $nombreNuevo.'.'.$archivo->extension(),'public');
             //dd($ruta);
         }
@@ -97,12 +100,14 @@ class documentosController extends Controller
     }
     
     public function update(Request $request, $id){
+        //usamos la extencion carbon para obtener la fecha y hora actual perteneciente a Chile
+        $fecha = Carbon::now('America/Santiago')->format('d-m-Y H-i-s');
         $documento = Documento::find($id);
         $url = env('URL_API');
         $http = Http::withoutVerifying();
         $request->validate([
-            'titulo' => 'required',
-            'descripcion'=> 'required',
+            'titulo' => 'required|max:30',
+            'descripcion'=> 'required|max:100',
             'archivo' => 'file|mimes:pdf'
         ]);
         //verificamos si el campo archivo no tiene un archivo, en el caso de que no reciba algun archivo, se conservara el que ya estaba asociado originalmente.
@@ -113,7 +118,7 @@ class documentosController extends Controller
             //en el caso que el campo 'archivo' contenga un archivo, remplazara al anterior que estaba
             File::delete(public_path('storage/'.$documento->archivo));
             $archivo = $request->file('archivo');
-            $nombreNuevo = $request->titulo. ' ' . date('Y');
+            $nombreNuevo = $request->titulo. ' ' . $fecha;
             $ruta = $archivo->storeAs('documents/'.date('Y'), $nombreNuevo.'.'.$archivo->extension(),'public');
         }
         

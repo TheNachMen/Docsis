@@ -10,7 +10,6 @@
 <body class="bg-muni">
     <div class="container">
         <div class="card">
-            
                     <h1 class=".tx-10">Nuevo Documento</h1>
                     <form action="{{ route('documentos.store') }}" method="POST" enctype="multipart/form-data" >
                         @csrf
