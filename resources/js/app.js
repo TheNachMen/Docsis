@@ -25,22 +25,19 @@ import './components/App';
 
   $('#confirmarCambioEstado').click(function() {
     var id = $(this).data('id');
-    // Llamar a la función en el controlador
     $.ajax({
-      url: 'http://127.0.0.1:8000/api/documentosEstado/' + id,
-      type: 'PATCH',
-      data: {
-        _token: '{{ csrf_token() }}'
-      },
-      success: function(response) {
-        // Cerrar el modal
-        $('#cambiarEstadoModal').modal('hide');
-        // Actualizar la tabla o mostrar un mensaje de éxito
-        window.location.reload(); // Recargar la página para actualizar la tabla
-      },
-      error: function(error) {
-        // Mostrar un mensaje de error
-        alert('Error al cambiar el estado del documento.');
-      }
+        url: '/cambiarestado/' + id,
+        type: 'PATCH',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            $('#cambiarEstadoModal').modal('hide');
+            window.location.reload();
+        },
+        error: function(error) {
+            $('#cambiarEstadoModal').modal('hide');
+            window.location.reload();
+        }
     });
-  });
+});

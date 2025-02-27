@@ -8,6 +8,10 @@ use Spatie\Permission\Models\Permission;
 class roleController extends Controller
 {
 
+    public function __construct(){
+        $this->middleware('can:users.index');
+        
+    }
     
     /**
      * Display a listing of the resource.

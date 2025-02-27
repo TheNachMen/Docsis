@@ -9,6 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documentos</title>
     
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
 </head>
 
 <body class="bg-muni">
@@ -24,11 +26,7 @@
             </div>
             @endcan
             <br>
-            <!--
-            @foreach ( $meses as  $mes)
-            <div>{{ $mes[1] }}</div>
-            @endforeach
-            -->   
+              
             <div class="card">
                 <div class="card-body bg-gris-10">
                         <table id='tabla'>
@@ -66,8 +64,8 @@
                                                 <td data-cell="estado"><span class="badge text-bg-success fs-5 text text-uppercase">{{$documento[1]['estado']}}</span></td>
                                                 <td class='no-hover'>
                                                     <div class="btn-group" role="group">
-                                                            @can('documentos.estado')
-                                                                <button type="button" class="btn btn-danger" 
+                                                            @can('documentos.estado')  
+                                                                <button type="button" class="btn btn-secondary" 
                                                                 data-bs-toggle="modal"
                                                                 data-id="{{$documento[1]['id_documento']}}"
                                                                 data-bs-target="#cambiarEstadoModal" 
@@ -101,10 +99,6 @@
                 </table><br>
                 </div>
             </div>
-            
-
-
-
     </div>
     <!--MODAL-->
     <div class="modal fade" id="cambiarEstadoModal" tabindex="-1" role="dialog" aria-labelledby="cambiarEstadoModalLabel" aria-hidden="true">
