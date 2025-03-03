@@ -35,9 +35,14 @@ import './components/App';
             $('#cambiarEstadoModal').modal('hide');
             window.location.reload();
         },
+        /*
         error: function(error) {
-            $('#cambiarEstadoModal').modal('hide');
-            window.location.reload();
+           alert('Error al cambiar el estado del documento');
         }
+           */
+        error: function(error) {
+          $('#cambiarEstadoModal').modal('hide');
+          window.location.reload();
+       }
     });
 });

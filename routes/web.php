@@ -19,7 +19,7 @@ use App\Http\Controllers\HomeController;
 */
 
 Route::get('/', function () {
-    return view('auth.login');
+    return redirect('login');
 });
 
 
@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () {
 
     Route::patch('/cambiarestado/{id}', [documentosController::class, 'cambiarEstado'])->name('documentos.estado');
 
-
+    /*
     //Rutas para el admin
     Route::namespace('App\Http\Controller')->prefix('admin')->group(function () {
         //usuarios y sus roles
@@ -55,5 +55,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/role/update/{id}',[roleController::class,'update'])->name('admin.role.update');
         Route::get('/role/delete/{role}',[roleController::class,'destroy'])->middleware('can:users.index')->name('admin.role.delete');
     });
+    */
     
 });

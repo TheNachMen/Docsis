@@ -14,10 +14,10 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     
-    protected $connection = 'mysql'; //establece la conexion con la base de datos
+    //protected $connection = 'mysql'; //establece la conexion con la base de datos
 
     
-    protected $table = 'db_comunes.users'; //establece conexion con la tabla User de la base de datos db_comunes
+    //protected $table = 'db_comunes.users'; //establece conexion con la tabla User de la base de datos db_comunes
 
     /**
      * The attributes that are mass assignable.

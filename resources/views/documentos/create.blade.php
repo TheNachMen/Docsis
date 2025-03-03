@@ -1,10 +1,12 @@
-@include('layouts.app')
-
+@extends('layouts.app')
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
     <title>Document</title>
 </head>
 <body class="bg-muni">
@@ -41,7 +43,7 @@
                             <small class="text-danger">Archivo faltante o formato incorrecto</small>
                             @enderror
                         </div>
-                        <button type="submit" class="btn btn-primary">CREAR</button>
+                        <button type="submit" class="btn btn-success">CREAR DOCUMENTO</button>
                     </form>
                     <br>
                     <div>
@@ -55,3 +57,4 @@
     
 </body>
 </html>
+@endsection

@@ -5,11 +5,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documentos</title>
-    
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/dataTables.bootstrap.min.css' integrity='sha512-BMbq2It2D3J17/C7aRklzOODG1IQ3+MHw3ifzBHMBwGO/0yUqYmsStgBjI0z5EYlaDEFnvYV7gNYdD3vFLRKsA==' crossorigin='anonymous' referrerpolicy='no-referrer' />
     
 </head>
 
@@ -20,9 +19,14 @@
                 {{ session('success-create') }}
             </div><br>
             @endif
+            @if (session('success-estado'))
+            <div class="alert alert-info">
+                {{ session('success-estado') }}
+            </div><br>
+            @endif
             @can('documentos.store')
             <div>
-                <a class="text-light" href="{{ route('documentos.create') }}"><button class="btn btn-primary">NUEVO DOCUMENTO</button></a>
+                <a class="text-light" href="{{ route('documentos.create') }}"><button class="btn btn-primary">CREAR NUEVO DOCUMENTO</button></a>
             </div>
             @endcan
             <br>
@@ -75,13 +79,14 @@
                                                             @endcan
                                                             
                                                             @can('documentos.update')
-                                                                <button type="button" id="mod" class="btn btn-success btn-sm"
+                                                                <a  href="/editar/{{$documento[1]['id_documento']}}">
+                                                                <button type="button" id="mod" class="btn btn-success "
                                                                 data-bs-toggle="tooltip" 
                                                                 data-bs-placement="right"
                                                                 data-bs-custom-class="tooltip-success"
                                                                 data-toggle="modal"
                                                                 data-target="#modalDocumento"
-                                                                data-bs-title="EDITAR Registro"><a href="/editar/{{$documento[1]['id_documento']}}"><i class="bi bi-pen-fill"></i></a></button>
+                                                                data-bs-title="EDITAR Registro"><i class="bi bi-pen-fill"></i></button></a>
                                                             @endcan
                                                             
                                                     </div>
@@ -125,23 +130,19 @@
 
 
 </body>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{{ asset('js/app.js') }}" ></script>
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js' integrity='sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==' crossorigin='anonymous' referrerpolicy='no-referrer'></script>
 <script>
     $(document).ready(function () {
         // Inicializa DataTable
         $('#tabla').DataTable({
             "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+                "url": "/i18n/Spanish.json"
             }    
-        });
-
-        // Inicializa los tooltips
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => {
-            return new window.bootstrap.Tooltip(tooltipTriggerEl);
         });
     });
 </script>
+
 </html>
 @endsection
