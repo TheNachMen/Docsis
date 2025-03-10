@@ -30,9 +30,20 @@
             </div>
             @endcan
             <br>
-              
+
             <div class="card">
                 <div class="card-body bg-gris-10">
+                    <label>Mostrar documentos del mes:
+                        <select id="mesSelect">
+                            <option value="">Selecciona un mes</option>
+                            @foreach ($meses as $numeroMes => $nombreMes)
+                                <option value="{{ $numeroMes }}" {{ request('mes') == $numeroMes ? 'selected' : '' }} >
+                                    {{ $nombreMes }}
+                                </option>
+                            @endforeach
+                        </select><br>
+                    </label>
+                    
                         <table id='tabla'>
                             <thead>
                                 <tr>
@@ -46,64 +57,71 @@
                             </thead>
                             <tbody>
                                 @foreach ($documentos["estadosActuales"] as $documento)
-                                    @can('documentos.cerrado')
-                                        @if ($documento[1]['estado'] == 'cerrado')
-                                            <tr class="table-secondary">
-                                                <td class="text-bg-secondary p-3 fs-5 text" data-cell="disabled fecha_modificacion">{{date('d-m-Y',strtotime($documento[0]['fecha_modificacion']))}}</td>
-                                                <td class="text-bg-secondary p-3 fs-5 text" data-cell="titulo">{{$documento[1]['titulo']}}</td>
-                                                <td class="text-bg-secondary p-3 fs-5 text" data-cell="descripcion">{{$documento[1]['descripcion']}}</td>
-                                                <td class="text-bg-secondary p-3 fs-5 text" data-cell="archivo"></td>
-                                                <td class="text-bg-secondary p-3" data-cell="estado"><span class="badge text-bg-secondary fs-5 text text-uppercase">{{$documento[1]['estado']}}</span></td>
-                                                <td class="text-bg-secondary p-3 fs-5 text"></td>
-                                            </tr>
-                                        @endif
-                                    @endcan
-                                    
-                                    @if ($documento[1]['estado'] == 'abierto')
-                                        <tr class="disabled table-secondary">
-                                                <td data-cell="fecha_modificacion" class="p-3 fs-5 text">{{date('d-m-Y',strtotime($documento[0]['fecha_modificacion']))}}</td>
-                                                <td data-cell="titulo" class="p-3 fs-5 text">{{$documento[1]['titulo']}}</td>
-                                                <td data-cell="descripcion" class="p-3 fs-5 text">{{$documento[1]['descripcion']}}</td>
-                                                <td data-cell="archivo" class="p-3 fs-5 text"><a href="{{ asset('storage/'.$documento[1]['archivo']) }}"><button>Descargar</button></a></td>
-                                                <td data-cell="estado"><span class="badge text-bg-success fs-5 text text-uppercase">{{$documento[1]['estado']}}</span></td>
-                                                <td class='no-hover'>
-                                                    <div class="btn-group" role="group">
-                                                            @can('documentos.estado')  
-                                                                <button type="button" class="btn btn-secondary" 
-                                                                data-bs-toggle="modal"
-                                                                data-id="{{$documento[1]['id_documento']}}"
-                                                                data-bs-target="#cambiarEstadoModal" 
-                                                                data-bs-placement="left"
-                                                                data-bs-custom-class="tooltip-danger"
-                                                                data-bs-title="CAMBIAR Estado"><i class="bi bi-x-lg"></i></button>
-                                                            @endcan
-                                                            
-                                                            @can('documentos.update')
-                                                                <a  href="/editar/{{$documento[1]['id_documento']}}">
-                                                                <button type="button" id="mod" class="btn btn-success "
-                                                                data-bs-toggle="tooltip" 
-                                                                data-bs-placement="right"
-                                                                data-bs-custom-class="tooltip-success"
-                                                                data-toggle="modal"
-                                                                data-target="#modalDocumento"
-                                                                data-bs-title="EDITAR Registro"><i class="bi bi-pen-fill"></i></button></a>
-                                                            @endcan
-                                                            
-                                                    </div>
+                                    @if ($documento[0]['mes'] == request('mes'))
+                                        @can('documentos.cerrado')
+                                            @if ($documento[1]['estado'] == 'cerrado')
+                                                <tr class="table-secondary">
+                                                    <td class="text-bg-secondary p-3 fs-5 text" data-cell="disabled fecha_modificacion">{{date('d-m-Y',strtotime($documento[0]['fecha_modificacion']))}}</td>
+                                                    <td class="text-bg-secondary p-3 fs-5 text" data-cell="titulo">{{$documento[1]['titulo']}}</td>
+                                                    <td class="text-bg-secondary p-3 fs-5 text" data-cell="descripcion">{{$documento[1]['descripcion']}}</td>
+                                                    <td class="text-bg-secondary p-3 fs-5 text" data-cell="archivo"></td>
+                                                    <td class="text-bg-secondary p-3" data-cell="estado"><span class="badge text-bg-secondary fs-5 text text-uppercase">{{$documento[1]['estado']}}</span></td>
+                                                    <td class="text-bg-secondary p-3 fs-5 text"></td>
+                                                </tr>
+                                            @endif
+                                        @endcan
+                                        
+                                        @if ($documento[1]['estado'] == 'abierto')
+                                            <tr class="disabled table-secondary">
+                                                    <td data-cell="fecha_modificacion" class="p-3 fs-5 text">{{date('d-m-Y',strtotime($documento[0]['fecha_modificacion']))}}</td>
+                                                    <td data-cell="titulo" class="p-3 fs-5 text">{{$documento[1]['titulo']}}</td>
+                                                    <td data-cell="descripcion" class="p-3 fs-5 text">{{$documento[1]['descripcion']}}</td>
+                                                    <td data-cell="archivo" class="p-3 fs-5 text"><a href="{{ $documento[1]['archivo'] }}"><button>Descargar</button></a></td>
+                                                    <td data-cell="estado"><span class="badge text-bg-success fs-5 text text-uppercase">{{$documento[1]['estado']}}</span></td>
+                                                    <td class='no-hover'>
+                                                        <div class="btn-group" role="group">
+                                                                @can('documentos.estado')  
+                                                                    <button type="button" class="btn btn-secondary" 
+                                                                    data-bs-toggle="modal"
+                                                                    data-id="{{$documento[1]['id_documento']}}"
+                                                                    data-bs-target="#cambiarEstadoModal" 
+                                                                    data-bs-placement="left"
+                                                                    data-bs-custom-class="tooltip-danger"
+                                                                    data-bs-title="CAMBIAR Estado"><i class="bi bi-x-lg"></i></button>
+                                                                @endcan
+                                                                
+                                                                @can('documentos.update')
+                                                                    <a  href="/editar/{{$documento[1]['id_documento']}}">
+                                                                    <button type="button" id="mod" class="btn btn-success "
+                                                                    data-bs-toggle="tooltip" 
+                                                                    data-bs-placement="right"
+                                                                    data-bs-custom-class="tooltip-success"
+                                                                    data-toggle="modal"
+                                                                    data-target="#modalDocumento"
+                                                                    data-bs-title="EDITAR Registro"><i class="bi bi-pen-fill"></i></button></a>
+                                                                @endcan
+                                                                
+                                                        </div>
 
-                                                </td>
-                                                
-                                    
-                                            </tr>
-                                    @endif
+                                                    </td>
+                                                    
+                                        
+                                                </tr>
+                                        @endif
+                                        <!-- final de if abiertos -->
+                                    @endif    
+                                     
                                 @endforeach
                             </tbody>
-                    <tfoot>
-                        
-                    </tfoot>
-                </table><br>
+                            <tfoot>
+                                
+                            </tfoot>
+                        </table><br>
                 </div>
-            </div>
+            </div><br>
+            <!-- fin de card con table -->
+            
+             
     </div>
     <!--MODAL-->
     <div class="modal fade" id="cambiarEstadoModal" tabindex="-1" role="dialog" aria-labelledby="cambiarEstadoModalLabel" aria-hidden="true">
@@ -143,6 +161,39 @@
         });
     });
 </script>
+<script>
+    document.getElementById('mesSelect').addEventListener('change', function() {
+        const mesSeleccionado = this.value;
+        window.location.href = window.location.pathname + '?mes=' + mesSeleccionado;
+    });
+   
+</script>
+<script>
+    $('#cambiarEstadoModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget);
+    var id = button.data('id');
+    $('#confirmarCambioEstado').data('id', id);
+  });
 
+  $('#confirmarCambioEstado').click(function() {
+    var id = $(this).data('id');
+    $.ajax({
+        url: '/cambiarestado/' + id,
+        type: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            $('#cambiarEstadoModal').modal('hide');
+            window.location.reload();
+        },
+        
+        error: function(error) {
+           alert('Error al cambiar el estado del documento');
+        }
+           
+    });
+});
+</script>
 </html>
 @endsection

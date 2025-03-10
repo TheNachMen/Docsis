@@ -17,32 +17,4 @@ import './components/App';
 
 
 
-  $('#cambiarEstadoModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget);
-    var id = button.data('id');
-    $('#confirmarCambioEstado').data('id', id);
-  });
-
-  $('#confirmarCambioEstado').click(function() {
-    var id = $(this).data('id');
-    $.ajax({
-        url: '/cambiarestado/' + id,
-        type: 'PATCH',
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function(response) {
-            $('#cambiarEstadoModal').modal('hide');
-            window.location.reload();
-        },
-        /*
-        error: function(error) {
-           alert('Error al cambiar el estado del documento');
-        }
-           */
-        error: function(error) {
-          $('#cambiarEstadoModal').modal('hide');
-          window.location.reload();
-       }
-    });
-});
+  

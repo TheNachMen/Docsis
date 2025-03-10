@@ -6,6 +6,7 @@ use File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
+use Log;
 use Spatie\Permission\Models\Role;
 
 class documentosController extends Controller
@@ -21,7 +22,7 @@ class documentosController extends Controller
     
     public function index()
     {
-        //$meses=[[1,'ENERO'],[2,'FEBRERO'],[3,'MARZO'],[4,'ABRIL'],[5,'MAYO'],[6,'JUNIO'],[7,'JULIO'],[8,'AGOSTO'],[9,'SEPTIEMBRE'],[10,'OCTUBRE'],[11,'NOVIEMBRE'],[12,'DICIEMBRE']];
+        $meses=[1 =>'ENERO',2=>'FEBRERO',3=>'MARZO',4=>'ABRIL',5=>'MAYO',6=>'JUNIO',7=>'JULIO',8=>'AGOSTO',9=>'SEPTIEMBRE',10=>'OCTUBRE',11=>'NOVIEMBRE',12=>'DICIEMBRE'];
         $usuario = auth()->user();
         //$usuario->assignRole('Administrador');
         //dd($usuario,$usuario->roles);
@@ -30,7 +31,7 @@ class documentosController extends Controller
         $response = $http->get($url.'documentos');
         $documentos = $response->json();
         //dd($documentos);
-        return view('documentos.index',compact('documentos','usuario'));
+        return view('documentos.index',compact('documentos','usuario','meses'));
     }
     public function create(){
 
@@ -38,10 +39,20 @@ class documentosController extends Controller
 
     }
     public function store(Request $request){
+        //Verificar y agregar archivo en base64
+        $base64File = $request->input('archivo_base64');
+    
+           if (!empty($base64File))  {
+                $formData['archivo_base64'] = $base64File;
+                Log::info('Archivo base64 detectado', [
+                    'base64' => $base64File
+                ]);
+            } else {
+                Log::warning('No se detectó archivo base64 o no esta vacio');
+            }
+        //dd($base64File);
         //obtener el id del usuario autenticado
         $usuario = auth()->user()->id;
-        //obtener la fecha actual correspondiente a Chile
-        $fecha = Carbon::now('America/Santiago')->format('d-m-Y H-i-s');
         //$ip = request()->ip();
         $ip = $request->ip();
         //$ip = \Request::ip();
@@ -56,16 +67,6 @@ class documentosController extends Controller
             'archivo' => 'required|file|mimes:pdf'
         ]);
         
-        //asignamos una variable ruta
-        $ruta= "";
-        //verificamos si el campo archivo tiene un archivo.
-        if($request->hasFile('archivo')){
-            $archivo = $request->file('archivo');
-            //dd($archivo);
-            $nombreNuevo = $request->titulo. ' ' . $fecha;
-            $ruta = $archivo->storeAs('documents/'.date('Y'), $nombreNuevo.'.'.$archivo->extension(),'public');
-            //dd($ruta);
-        }
         
         //LLamar a la API
         $url = env('URL_API');
@@ -75,7 +76,7 @@ class documentosController extends Controller
             $formData=[
                 'titulo'=> $request->titulo,
                 'descripcion'=> $request->descripcion,
-                'archivo'=> $ruta,
+                'archivo'=> $base64File,
             ];
             //dd($formData);
             $response = $http->withHeaders([
@@ -90,8 +91,6 @@ class documentosController extends Controller
             return back()->withError('Error al enviar datos'.$e->getMessage());
         }
         
-        
-
 
     }
     public function edit($id){
@@ -112,15 +111,17 @@ class documentosController extends Controller
         $url = env('URL_API');
         $http = Http::withoutVerifying();
         //usamos la extension Carbon para obtener la fecha y hora actual perteneciente a Chile
-        $fecha = Carbon::now('America/Santiago')->format('d-m-Y H-i-s');
+        
         $response_doc = $http->get($url.'documentosShow/'. $id);
         $documento = $response_doc->json();
         
+
         $request->validate([
             'titulo' => 'required|max:30',
             'descripcion'=> 'required|max:100',
             'archivo' => 'file|mimes:pdf'
         ]);
+
         //verificamos si el campo archivo no tiene un archivo, en el caso de que no reciba algun archivo, se conservara el que ya estaba asociado originalmente.
         if(!$request->hasFile('archivo')){
             $ruta = $documento['documento']['archivo'];
@@ -128,9 +129,21 @@ class documentosController extends Controller
         }else{
             //File::delete(public_path('storage/'.$documento->archivo));
             //en el caso que el campo 'archivo' contenga un archivo, remplazara al anterior que estaba
-            $archivo = $request->file('archivo');
-            $nombreNuevo = $request->titulo. ' ' . $fecha;
-            $ruta = $archivo->storeAs('documents/'.date('Y'), $nombreNuevo.'.'.$archivo->extension(),'public');
+            $base64File = $request->input('archivo_base64');
+    
+           if (!empty($base64File))  {
+                $formData['archivo_base64'] = $base64File;
+                Log::info('Archivo base64 detectado', [
+                    'base64' => $base64File
+                ]);
+            } else {
+                Log::warning('No se detectó archivo base64 o no esta vacio');
+            }
+            $ruta = $base64File;
+
+            // $archivo = $request->file('archivo');
+            // $nombreNuevo = $request->titulo. ' ' . $fecha;
+            // $ruta = $archivo->storeAs('documents/'.date('Y'), $nombreNuevo.'.'.$archivo->extension(),'public');
         }
         
         $formData=[
@@ -138,7 +151,7 @@ class documentosController extends Controller
             'descripcion'=> $request->descripcion,
             'archivo'=> $ruta,
         ];
-        
+        //dd($formData);
         //llamar a la API para actualizar
         $response = $http->withHeaders([
             'X-User-ID'=> $usuario,

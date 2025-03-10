@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/editar/{id}',[documentosController::class, 'edit'])->name('documentos.edit');
     Route::post('/actualizar/{id}',[documentosController::class,'update'])->name('documentos.update');
 
-    Route::patch('/cambiarestado/{id}', [documentosController::class, 'cambiarEstado'])->name('documentos.estado');
+    Route::post('/cambiarestado/{id}', [documentosController::class, 'cambiarEstado'])->name('documentos.estado');
 
     /*
     //Rutas para el admin
