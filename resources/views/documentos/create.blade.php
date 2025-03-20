@@ -34,6 +34,15 @@
                             <small class="text-danger">Debe llenar el campo Descripcion</small>
                             @enderror
                         </div>
+                         <div class="mb-3">
+                            <label for="fecha_hora" class="form-label">Fecha Inicio</label>
+                            <input type="datetime-local" class="form-control" id="fecha_hora" name="fecha_hora"  min="{{ now()->format('Y-m-d\TH:i') }}" value="{{ old('fecha_hora') }}">
+
+                            @error('fecha_hora')
+                            <br>
+                            <small class="text-danger">Debe seleccion una fecha</small>
+                            @enderror
+                        </div>
                         <div class="mb-2 col-12">
                                 <label class="form-label" for="archivo"><b>Documento</b></label>
                                 <input id="archivo" class="form-control" type="file" name="archivo" accept=".pdf" style="display: none;">
@@ -48,6 +57,7 @@
                                 <small class="text-danger">Archivo faltante o formato incorrecto</small>
                                 @enderror
                         </div>
+                       
                             
                             <!-- Sección para mostrar el archivo cargado -->
                             <div id="listaArchivos" class="mt-3"></div>

@@ -47,9 +47,10 @@
                         <table id='tabla'>
                             <thead>
                                 <tr>
-                                        <th scope="col" class="fs-4 text">Fecha publicacion</th>
+                                        <th scope="col" class="fs-4 text">Fecha modificacion</th>
                                         <th scope="col" class="fs-4 text">Titulo</th>
                                         <th scope="col" class="fs-4 text">Descripcion</th>
+                                        <th scope="col" class="fs-4 text">fecha inicio</th>
                                         <th scope="col" class="fs-4 text">Archivo</th>
                                         <th scope="col" class="fs-4 text">Estado</th>
                                         <th scope="col" class="fs-4 text"></th>
@@ -64,6 +65,7 @@
                                                     <td class="text-bg-secondary p-3 fs-5 text" data-cell="disabled fecha_modificacion">{{date('d-m-Y',strtotime($documento[0]['fecha_modificacion']))}}</td>
                                                     <td class="text-bg-secondary p-3 fs-5 text" data-cell="titulo">{{$documento[1]['titulo']}}</td>
                                                     <td class="text-bg-secondary p-3 fs-5 text" data-cell="descripcion">{{$documento[1]['descripcion']}}</td>
+                                                    <td class="text-bg-secondary p-3 fs-5 text" data-cell="fecha_inicio">{{$documento[1]['fecha_inicio']}}</td>
                                                     <td class="text-bg-secondary p-3 fs-5 text" data-cell="archivo"></td>
                                                     <td class="text-bg-secondary p-3" data-cell="estado"><span class="badge text-bg-secondary fs-5 text text-uppercase">{{$documento[1]['estado']}}</span></td>
                                                     <td class="text-bg-secondary p-3 fs-5 text"></td>
@@ -73,10 +75,19 @@
                                         
                                         @if ($documento[1]['estado'] == 'abierto')
                                             <tr class="disabled table-secondary">
-                                                    <td data-cell="fecha_modificacion" class="p-3 fs-5 text">{{date('d-m-Y',strtotime($documento[0]['fecha_modificacion']))}}</td>
+                                                    @if ($documento[0]['estado_actual'] == 'a')
+                                                        <td data-cell="fecha_modificacion" class="p-3 fs-5 text">
+                                                        {{date('d-m-Y',strtotime($documento[0]['fecha_modificacion']))}}<br>
+                                                        (ACTUALIZADO)
+                                                        </td>
+                                                    @endif
+                                                    @if ($documento[0]['estado_actual'] == 'sc')
+                                                        <td data-cell="fecha_modificacion" class="p-3 fs-5 text">{{date('d-m-Y',strtotime($documento[0]['fecha_modificacion']))}}</td>
+                                                    @endif
                                                     <td data-cell="titulo" class="p-3 fs-5 text">{{$documento[1]['titulo']}}</td>
                                                     <td data-cell="descripcion" class="p-3 fs-5 text">{{$documento[1]['descripcion']}}</td>
-                                                    <td data-cell="archivo" class="p-3 fs-5 text"><a href="{{ $documento[1]['archivo'] }}"><button>Descargar</button></a></td>
+                                                    <td data-cell="fecha_inicio" class="p-3 fs-5 text">{{$documento[1]['fecha_inicio']}}</td>
+                                                    <td data-cell="archivo" class="p-3 fs-5 text"><a type="button" class="btn btn-success" href="{{ $documento[1]['archivo'] }}">Descargar</a></td>
                                                     <td data-cell="estado"><span class="badge text-bg-success fs-5 text text-uppercase">{{$documento[1]['estado']}}</span></td>
                                                     <td class='no-hover'>
                                                         <div class="btn-group" role="group">
@@ -109,6 +120,43 @@
                                                 </tr>
                                         @endif
                                         <!-- final de if abiertos -->
+                                        @if ($documento[1]['estado'] == 'pendiente')
+                                        <tr class="table-secondary">
+                                                    <td class="text-bg-info p-3 fs-5 text" data-cell="disabled fecha_modificacion">{{date('d-m-Y',strtotime($documento[0]['fecha_modificacion']))}}</td>
+                                                    <td class="text-bg-info p-3 fs-5 text" data-cell="titulo">{{$documento[1]['titulo']}}</td>
+                                                    <td class="text-bg-info p-3 fs-5 text" data-cell="descripcion">{{$documento[1]['descripcion']}}</td>
+                                                    <td class="text-bg-info p-3 fs-5 text" data-cell="fecha_inicio">{{$documento[1]['fecha_inicio']}}</td>
+                                                    <td data-cell="archivo" class="text-bg-info p-3 fs-5 text"><a type="button" class="btn btn-success" href="{{ $documento[1]['archivo'] }}">Descargar</a></td>
+                                                    <td class="text-bg-info p-3" data-cell="estado"><span class="badge text-bg-info fs-5 text text-uppercase">{{$documento[1]['estado']}}</span></td>
+                                                    <td class='no-hover text-bg-info'>
+                                                        <div class="btn-group" role="group">
+                                                                @can('documentos.estado')  
+                                                                    <button type="button" class="btn btn-secondary" 
+                                                                    data-bs-toggle="modal"
+                                                                    data-id="{{$documento[1]['id_documento']}}"
+                                                                    data-bs-target="#cambiarEstadoModal" 
+                                                                    data-bs-placement="left"
+                                                                    data-bs-custom-class="tooltip-danger"
+                                                                    data-bs-title="CAMBIAR Estado"><i class="bi bi-x-lg"></i></button>
+                                                                @endcan
+                                                                
+                                                                @can('documentos.update')
+                                                                    <a  href="/editar/{{$documento[1]['id_documento']}}">
+                                                                    <button type="button" id="mod" class="btn btn-success "
+                                                                    data-bs-toggle="tooltip" 
+                                                                    data-bs-placement="right"
+                                                                    data-bs-custom-class="tooltip-success"
+                                                                    data-toggle="modal"
+                                                                    data-target="#modalDocumento"
+                                                                    data-bs-title="EDITAR Registro"><i class="bi bi-pen-fill"></i></button></a>
+                                                                @endcan
+                                                                
+                                                        </div>
+
+                                                    </td>
+                                                </tr>
+                                        @endif
+                                        <!-- final de if de pendientes -->
                                     @endif    
                                      
                                 @endforeach

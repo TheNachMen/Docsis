@@ -62,11 +62,15 @@ class documentosController extends Controller
 
         //verificar y guardar el archivo 
         $request->validate([
-            'titulo' => 'required|max:30',
-            'descripcion'=> 'required|max:100',
+            'titulo' => 'required|max:60',
+            'descripcion'=> 'required|max:150',
+            'fecha_hora' => 'required',
             'archivo' => 'required|file|mimes:pdf'
+            
         ]);
-        
+
+        $fecha_hora = Carbon::parse($request->fecha_hora)->format('Y-m-d H:i:s');
+        //dd($fecha_hora);
         
         //LLamar a la API
         $url = env('URL_API');
@@ -77,6 +81,7 @@ class documentosController extends Controller
                 'titulo'=> $request->titulo,
                 'descripcion'=> $request->descripcion,
                 'archivo'=> $base64File,
+                'fecha_inicio'=>$fecha_hora,
             ];
             //dd($formData);
             $response = $http->withHeaders([
@@ -146,11 +151,23 @@ class documentosController extends Controller
             // $ruta = $archivo->storeAs('documents/'.date('Y'), $nombreNuevo.'.'.$archivo->extension(),'public');
         }
         
-        $formData=[
-            'titulo'=> $request->titulo,
-            'descripcion'=> $request->descripcion,
-            'archivo'=> $ruta,
-        ];
+        if($request->fecha_hora){
+            $fecha_hora = Carbon::parse($request->fecha_hora)->format('Y-m-d H:i:s');
+            $formData=[
+                'titulo'=> $request->titulo,
+                'descripcion'=> $request->descripcion,
+                'archivo'=> $ruta,
+                'fecha_inicio' => $fecha_hora
+            ];
+            //dd($formData);
+        }else{
+            $formData=[
+                'titulo'=> $request->titulo,
+                'descripcion'=> $request->descripcion,
+                'archivo'=> $ruta,
+            ];
+            //dd($formData);
+        }
         //dd($formData);
         //llamar a la API para actualizar
         $response = $http->withHeaders([

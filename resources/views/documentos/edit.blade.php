@@ -28,6 +28,18 @@
                     <label for="descripcion" class="form-label">Descripcion</label>
                     <input type="text" class="form-control" id="descripcion" name="descripcion" value="{{ $documento['documento']['descripcion'] }}">
                 </div>
+                @if ($documento['documento']['estado'] == 'pendiente')
+                <div class="mb-3">
+                    <label for="fecha_hora" class="form-label">Fecha Inicio</label>
+                    <input type="datetime-local" class="form-control" id="fecha_hora" name="fecha_hora"  min="{{ now()->format('Y-m-d\TH:i') }}" value="{{ $documento['documento']['fecha_inicio'] }}">
+
+                    @error('fecha_hora')
+                    <br>
+                    <small class="text-danger">Debe seleccion una fecha</small>
+                    @enderror
+                </div>
+                            
+                @endif
                 <div class="mb-2 col-12">
                                 <label class="form-label" for="archivo"><b>Documento</b></label>
                                 <input id="archivo" class="form-control" type="file" name="archivo" accept=".pdf" style="display: none;">
