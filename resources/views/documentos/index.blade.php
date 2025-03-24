@@ -65,7 +65,7 @@
                                                     <td class="text-bg-secondary p-3 fs-5 text" data-cell="disabled fecha_modificacion">{{date('d-m-Y',strtotime($documento[0]['fecha_modificacion']))}}</td>
                                                     <td class="text-bg-secondary p-3 fs-5 text" data-cell="titulo">{{$documento[1]['titulo']}}</td>
                                                     <td class="text-bg-secondary p-3 fs-5 text" data-cell="descripcion">{{$documento[1]['descripcion']}}</td>
-                                                    <td class="text-bg-secondary p-3 fs-5 text" data-cell="fecha_inicio">{{$documento[1]['fecha_inicio']}}</td>
+                                                    <td class="text-bg-secondary p-3 fs-5 text" data-cell="fecha_inicio">{{date('d-m-Y H:i:s',strtotime($documento[1]['fecha_inicio']))}}</td>
                                                     <td class="text-bg-secondary p-3 fs-5 text" data-cell="archivo"></td>
                                                     <td class="text-bg-secondary p-3" data-cell="estado"><span class="badge text-bg-secondary fs-5 text text-uppercase">{{$documento[1]['estado']}}</span></td>
                                                     <td class="text-bg-secondary p-3 fs-5 text"></td>
@@ -81,12 +81,12 @@
                                                         (ACTUALIZADO)
                                                         </td>
                                                     @endif
-                                                    @if ($documento[0]['estado_actual'] == 'sc')
+                                                    @if ($documento[0]['estado_actual'] == 'o')
                                                         <td data-cell="fecha_modificacion" class="p-3 fs-5 text">{{date('d-m-Y',strtotime($documento[0]['fecha_modificacion']))}}</td>
                                                     @endif
                                                     <td data-cell="titulo" class="p-3 fs-5 text">{{$documento[1]['titulo']}}</td>
                                                     <td data-cell="descripcion" class="p-3 fs-5 text">{{$documento[1]['descripcion']}}</td>
-                                                    <td data-cell="fecha_inicio" class="p-3 fs-5 text">{{$documento[1]['fecha_inicio']}}</td>
+                                                    <td data-cell="fecha_inicio" class="p-3 fs-5 text">{{date('d-m-Y H:i:s',strtotime($documento[1]['fecha_inicio']))}}</td>
                                                     <td data-cell="archivo" class="p-3 fs-5 text"><a type="button" class="btn btn-success" href="{{ $documento[1]['archivo'] }}">Descargar</a></td>
                                                     <td data-cell="estado"><span class="badge text-bg-success fs-5 text text-uppercase">{{$documento[1]['estado']}}</span></td>
                                                     <td class='no-hover'>
@@ -125,21 +125,11 @@
                                                     <td class="text-bg-info p-3 fs-5 text" data-cell="disabled fecha_modificacion">{{date('d-m-Y',strtotime($documento[0]['fecha_modificacion']))}}</td>
                                                     <td class="text-bg-info p-3 fs-5 text" data-cell="titulo">{{$documento[1]['titulo']}}</td>
                                                     <td class="text-bg-info p-3 fs-5 text" data-cell="descripcion">{{$documento[1]['descripcion']}}</td>
-                                                    <td class="text-bg-info p-3 fs-5 text" data-cell="fecha_inicio">{{$documento[1]['fecha_inicio']}}</td>
+                                                    <td class="text-bg-info p-3 fs-5 text" data-cell="fecha_inicio">{{date('d-m-Y H:i:s',strtotime($documento[1]['fecha_inicio']))}}</td>
                                                     <td data-cell="archivo" class="text-bg-info p-3 fs-5 text"><a type="button" class="btn btn-success" href="{{ $documento[1]['archivo'] }}">Descargar</a></td>
                                                     <td class="text-bg-info p-3" data-cell="estado"><span class="badge text-bg-info fs-5 text text-uppercase">{{$documento[1]['estado']}}</span></td>
                                                     <td class='no-hover text-bg-info'>
                                                         <div class="btn-group" role="group">
-                                                                @can('documentos.estado')  
-                                                                    <button type="button" class="btn btn-secondary" 
-                                                                    data-bs-toggle="modal"
-                                                                    data-id="{{$documento[1]['id_documento']}}"
-                                                                    data-bs-target="#cambiarEstadoModal" 
-                                                                    data-bs-placement="left"
-                                                                    data-bs-custom-class="tooltip-danger"
-                                                                    data-bs-title="CAMBIAR Estado"><i class="bi bi-x-lg"></i></button>
-                                                                @endcan
-                                                                
                                                                 @can('documentos.update')
                                                                     <a  href="/editar/{{$documento[1]['id_documento']}}">
                                                                     <button type="button" id="mod" class="btn btn-success "
@@ -194,9 +184,6 @@
 
 
 
-
-</body>
-
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js' integrity='sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==' crossorigin='anonymous' referrerpolicy='no-referrer'></script>
 <script>
@@ -243,5 +230,8 @@
     });
 });
 </script>
+</body>
+
+
 </html>
 @endsection
